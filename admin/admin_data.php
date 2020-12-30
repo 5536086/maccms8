@@ -252,9 +252,7 @@ else if($ac=='save')
 			$colarr = array("ug_name","ug_type","ug_popedom","ug_upgrade","ug_popvalue");
 			for($i=0;$i<count($colarr);$i++){
 				$n=$colarr[$i];
-				if($n!='ug_type' && $n!='ug_popedom'){
-					$valarr[$n]=be("all",$n);
-				}
+				$valarr[$n]=be("all",$n);
 			}
 			
 			$str=be("arr","ug_type");
@@ -283,7 +281,7 @@ else if($ac=='save')
 			$valarr['ug_popedom'] = $ug_popedom;
 			$valarr['ug_upgrade'] = intval( $valarr['ug_upgrade']);
 			$valarr['ug_popvalue'] = intval( $valarr['ug_popvalue']);
-			
+
 			$where = "ug_id=".$id;
 			$upcache=true;
 			break;
@@ -999,17 +997,17 @@ elseif($ac=='memcached')
         }
 	    elseif($type=='2'){
             $mem=new Memcached;
+            $mem->setOption(Memcached::OPT_BINARY_PROTOCOL, true);
             if(!$mem->addServer($host,$port)){
                 echo '连接失败!';
             }
             else{
-                $mem->setOption(Memcached::OPT_BINARY_PROTOCOL, true);
-                if(!$mem->setSaslAuthData($user,$pass)){
-                    echo '连接成功但用户密码验证失败!';
-                }
-                else{
+                //if(!$mem->setSaslAuthData($user,$pass)){
+                    //echo '连接成功但用户密码验证失败!';
+                //}
+                //else{
                     echo 'ok';
-                }
+                //}
             }
         }
 	    else{

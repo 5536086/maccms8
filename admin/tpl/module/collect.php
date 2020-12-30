@@ -94,7 +94,7 @@ elseif($method=='list')
     $plt->set_block('main', 'list_'.$rn, 'rows_'.$rn);
     foreach($xml->class->ty as $ty){
         $typeid = (string)@$ty->attributes()->id;
-        $typename = filter_tags((string)$ty);
+        $typename = htmlspecialchars((string)$ty);
         $isbind = false;
         $uid = intval( $bindcache[$flag.$typeid] );
         if ($uid>0){
@@ -125,9 +125,9 @@ elseif($method=='list')
     $key=0;
     foreach($xml->list->video as $video){
         $id = (string)$video->id;
-        $name = filter_tags((string)$video->name);
+        $name = htmlspecialchars((string)$video->name);
         $nameencode = urlencode(substring($name,4));
-        $typename = filter_tags((string)$video->type);
+        $typename = htmlspecialchars((string)$video->type);
         $now = date('Y-m-d',time());
 
         $time = (string)$video->last;
@@ -135,7 +135,7 @@ elseif($method=='list')
         if($sc==1){ $time = date('Y-',time()).$time; }
         $time = getColorDay(strtotime($time));
         $chk = strpos(','.$time,$now)>0 ? 'checked' : '';
-        $from = filter_tags((string)$video->dt);
+        $from = htmlspecialchars((string)$video->dt);
         $valarr=array($id,$name,$typename,$from,$time,$chk,$nameencode);
         for($i=0;$i<count($colarr);$i++){
             $n = $colarr[$i];
@@ -463,18 +463,15 @@ elseif($method=='cj'){
                         }
                     }
 
-		            if($rc){
-		            	
-        				if (empty($row["d_pic"]) || strpos(",".$row["d_pic"], "http:")>0) { } else { $d_pic= $row["d_pic"];}
-        				if (empty($row["d_picthumb"]) || strpos(",".$row["d_picthumb"], "http:") > 0) { } else { $d_picthumb= $row["d_picthumb"];}
-        				if (empty($row["d_picslide"]) || strpos(",".$row["d_picslide"], "http:") > 0) { } else { $d_picslide= $row["d_picslide"];}
-        				
+		            if(1==1){
+        				if(empty($row["d_pic"]) || substr($row["d_pic"], 0, 4) == "http" ) { } else { $d_pic= $row["d_pic"];}
+        				if(empty($row["d_picthumb"]) || substr($row["d_picthumb"], 0, 4) == "http")  { } else { $d_picthumb= $row["d_picthumb"];}
+        				if(empty($row["d_picslide"]) || substr($row["d_picslide"], 0, 4) == "http" ) { } else { $d_picslide= $row["d_picslide"];}
+
 	                	$colarr = array();
 	                	$valarr = array();
 	                	array_push($colarr,'d_time');
 	                	array_push($valarr,time());
-
-
 
 	                	if(strpos(','.$uprule,'a') && $ct!=1){
 	                		array_push($colarr,'d_playfrom','d_playserver','d_playnote','d_playurl');
@@ -515,7 +512,8 @@ elseif($method=='cj'){
 	                	if(strpos(','.$uprule,'m')){ array_push($colarr,'d_subname'); array_push($valarr,$d_subname); }
 	                	
 	                	if(count($colarr)>0){
-	                		$db->Update ("{pre}vod",$colarr,$valarr,"d_id=".$row["d_id"] );
+                            $des .= '<font color="green">字段更新，成功。</font>';
+	                		$db->Update("{pre}vod",$colarr,$valarr,"d_id=".$row["d_id"] );
 	                	}
 	                }
 	            }
